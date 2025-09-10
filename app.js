@@ -8,8 +8,15 @@ const { verifyToken, isAdmin } = require('./middleware/auth-middleware');
 const app = express();
 const port = process.env.PORT || 3000;
 
+// app.use(cors({
+//   origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
+//   credentials: true
+// }));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
+  origin: [
+    'https://heroic-lolly-e95ead.netlify.app', 
+    'http://localhost:4200'                    
+  ],
   credentials: true
 }));
 
@@ -38,21 +45,18 @@ app.use("/auth", AuthRouter);
 // }
 
 async function connectDB() {
-  try {
-    const dbURI = process.env.MONGODB_URI;
-    if (!dbURI) {
-      console.error("MONGODB_URI not found in .env");
-      process.exit(1);
-    }
-    await mongoose.connect(dbURI);
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.error("MongoDB connection error:", err);
-  }
+await mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 }
 
 connectDB().catch(err => {
   console.error('Error connecting to MongoDB:', err);
+});
+
+app.get('/', (req, res) => {
+  res.send('API is working');
 });
 
 app.listen(port, () => {
