@@ -16,27 +16,41 @@ async function resgisterUser(model){
     await user.save();
   }
 
-  async function loginUser(model){
-    const user = await User.findOne({email:model.email});
-    const isMatched = await bcrypt.compare(model.password, user.password)
-    if(!user){
-        return null;
+async function loginUser(model) {
+    const user = await User.findOne({ email: model.email });
+
+    if (!user) {
+        return { error: "User not found" };
     }
-    if(isMatched){
-        const token = jwt.sign({
+
+    const isMatched = await bcrypt.compare(model.password, user.password);
+
+    if (!isMatched) {
+        return { error: "Invalid credentials" };
+    }
+
+  user.lastLogin = user.currentLogin || null; 
+  user.currentLogin = new Date();    
+  await user.save();
+
+    const token = jwt.sign(
+        {
             id: user._id,
             name: user.name,
             email: user.email,
-            isAdmin: user.isAdmin
-        },"secrete",
+            isAdmin: user.isAdmin,
+            phone: user.phone,
+            address: user.address,
+            lastLogin: user.lastLogin,
+            currentLogin: user.currentLogin,
+        },
+        "secrete",
         {
-            expiresIn: "1hr",
+            expiresIn: "1h", 
         }
     );
+
     return { token, user };
-    }else{
-        return null;
-    }
-  }
+}
  
   module.exports =  { resgisterUser, loginUser };

@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     phone: {
-        type: String,
+        type: Number,
         required: true
     },
     email: {
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         unique: true
     },
     address: {
-        type: String,
+        type: Object,
         required: true
     },
     isAdmin: {
@@ -29,7 +29,9 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    lastLogin: { type: Date },
+    currentLogin: { type: Date }
 });
 const User = mongoose.model('users', userSchema);
 module.exports = User;

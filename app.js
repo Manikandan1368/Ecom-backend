@@ -29,7 +29,7 @@ const OrderRouter = require('./routes/order');
 const CustomerRouter = require('./routes/customer');
 const AuthRouter = require('./routes/auth');
 
-app.use("/category", verifyToken, isAdmin, CategoryRouter);
+app.use("/category", CategoryRouter);
 app.use("/brand", verifyToken, isAdmin, BrandRouter);
 app.use("/product", verifyToken, isAdmin, ProductRouter);
 app.use("/order", verifyToken, isAdmin, OrderRouter);
