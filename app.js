@@ -14,12 +14,11 @@ const port = process.env.PORT || 3000;
 // }));
 app.use(cors({
   origin: [
-    'https://heroic-lolly-e95ead.netlify.app', 
+    'https://shopmate-angnode.netlify.app', 
     'http://localhost:4200'                    
   ],
   credentials: true
 }));
-
 app.use(express.json()); 
 
 const CategoryRouter = require('./routes/category');
